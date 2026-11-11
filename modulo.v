@@ -6,7 +6,7 @@ module modulo(
 
 wire [2:0] YD;
 wire [2:0] counter;
-wire C12, C23, reset_trigger;
+wire C12, C23, reset_trigger, reset_all;
 
 full_adder stage1add(
     .A(counter[0]),
@@ -45,7 +45,7 @@ full_adder stage3add(
 );
 d_flipflop stage3store(
     .D(YD[2]),
-    .clock(clcok),
+    .clock(clock),
     .Q(counter[2]),
     .notQ(),
     .reset(reset)
@@ -54,12 +54,11 @@ assign count[0] = counter[0];
 assign count[1] = counter[1];
 assign count[2] = counter[2];
 assign reset_trigger = (~(counter[0]))&(counter[1])&(counter[2]);
-d_flipflop final(
-    .D(reset_trigger),
-    .clock(clock),
+t_flipflop finalt(
+    .T('b1),
+    .clock(reset_trigger),
     .Q(out),
-    .notQ(),
-    .reset(reset)
+    .notQ()
 );
 
 endmodule
